@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WEBGIS-TEST</title>
+	<link rel="stylesheet" href="mystyle.css">
+	<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+</head>
+<body>
+	<div id="map"></div>
+	<script src="http://js.arcgis.com/3.14/"></script>
+	
+	<script>
+		var map;
+		require(["esri/map", "esri/dijit/OverviewMap",
+			"esri/layers/FeatureLayer","esri/layers/GraphicsLayer",
+			"esri/graphic","esri/geometry/Point","esri/geometry/Polyline",
+			"esri/symbols/SimpleMarkerSymbol","esri/symbols/SimpleLineSymbol","esri/Color",
+			"dojo/domReady!"], function(Map,OverviewMap,
+				FeatureLayer,GraphicsLayer,
+				Graphic,Point,Polyline,
+				SimpleMarkerSymbol,SimpleLineSymbol,Color) {
+	        map = new Map("map", {
+	          basemap: "topo",  
+	          center: [121, 31], 
+	          zoom: 7
+	        });
+
+	        var overviewMapDijit = new OverviewMap({
+			    map: map,
+			    visible: true,
+			    attachTo:"bottom-right"
+			});
+			overviewMapDijit.startup();
+			// var url="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3";
+			// var my_f_layer=new FeatureLayer(url);
+			// console.log(my_f_layer)
+			// map.addLayer(my_f_layer);
+
+			var graphLayer=new GraphicsLayer();
+			var pt=new Point(123,32);
+			var mycolor=new Color("#ff0000");
+			var outline=new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH,mycolor,10);
+			var sms=new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,10,outline,mycolor)
+			// var graphic = new Graphic(pt,sms,attr,infoTemplate);
+			
+
+			// http-get
+ 				
+			var data=[[122.68,45.53], [122.58,45.55],[122.57,45.58],[122.53,45.6]];
+			var polylineJson = {
+		    	"paths":[
+		    				data
+    					]
+		    };
+
+		    var polyline = new Polyline(polylineJson);
+		    var singlePathPolyline = new Polyline([[-50, 0], [-120, -20], [-130, 0]]);
+			var sls1 = new SimpleLineSymbol(
+			    SimpleLineSymbol.STYLE_DASH,
+			    new Color([255,0,0]),
+			    3
+			  );
+
+		    graphLayer.add(new Graphic(polyline,sls1));
+		    graphLayer.add(new Graphic(singlePathPolyline,sls1));
+			graphLayer.add(new Graphic(pt,sms))
+console.log(graphLayer)
+			map.addLayer(graphLayer);
+
+     	 });
+
+	</script>
+</body>
+</html>
